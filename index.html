@@ -176,6 +176,7 @@
             <div class="pharma-field"><label for="pharmaDose">Liều dùng nhận được</label><input id="pharmaDose" type="text" placeholder="Nhập hồ sơ trước" maxlength="100" disabled></div>
             <button id="pharmaVerifyBtn" type="button" class="role-btn dark" disabled><svg class="ico"><use href="#i-check"/></svg> Xác minh hồ sơ nhập</button>
             <div id="pharmaResult" class="pharma-result waiting" role="status" aria-live="polite"><svg class="ico"><use href="#i-info"/></svg><div><strong>Chưa có hồ sơ nhập</strong><span>Tải tệp JSON để xác minh giữa hai máy</span></div></div>
+            <p class="role-help"><strong>Lưu ý:</strong> Public Key lấy từ file chỉ chứng minh chữ ký tương ứng với khóa đó, chưa chứng nhận người ký là bác sĩ thật. Bệnh án trong demo là dữ liệu giả lập.</p>
           </article>
         </div>
 
@@ -187,7 +188,7 @@
       </section>
 
       <section class="compare-stage" id="so-sanh" aria-label="So sánh phiên bản đã ký với phiên bản hiện tại">
-        <div class="compare-heading"><div><span class="section-kicker">03 / PHÂN TÍCH BẰNG CHỨNG</span><h2>Cùng một hồ sơ. Hai trạng thái.</h2><p>So sánh trực tiếp nội dung sau ký — thay đổi nào cũng có thể kiểm chứng.</p></div><span id="compareBadge" class="compare-badge is-idle">CHƯA CÓ BẰNG CHỨNG</span></div>
+        <div class="compare-heading"><div><span class="section-kicker">05 / PHÂN TÍCH BẰNG CHỨNG</span><h2>Cùng một hồ sơ. Hai trạng thái.</h2><p>So sánh trực tiếp nội dung sau ký — thay đổi nào cũng có thể kiểm chứng.</p></div><span id="compareBadge" class="compare-badge is-idle">CHƯA CÓ BẰNG CHỨNG</span></div>
         <div class="compare-layout">
           <div class="compare-card compare-original"><div class="compare-card-top"><span class="compare-dot"></span><span>BẢN ĐÃ KÝ / ORIGINAL</span><svg class="ico"><use href="#i-lock"/></svg></div>
             <div class="compare-person"><div class="avatar-block">EMR</div><div><strong id="originalPatient">Chưa có dữ liệu ký</strong><span id="originalId">—</span></div></div>
