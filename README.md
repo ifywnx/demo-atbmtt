@@ -4,17 +4,28 @@ Website phục vụ báo cáo **An toàn và Bảo mật thông tin — Nhóm 5,
 
 **Chủ đề:** Bảo vệ tính toàn vẹn bệnh án và đơn thuốc điện tử bằng **SHA-256** và **chữ ký số RSA-PSS (RSA 2048-bit)**.
 
-## Mở demo
+## Website demo trực tuyến
 
-Website dùng HTML, CSS, JavaScript thuần, chạy trực tiếp trên trình duyệt, **không cần API key, Node.js, database hay backend**.
+**Production (Vercel):** https://demo-atbmtt.vercel.app/
 
-**GitHub Pages:** sau khi bật Pages, website có địa chỉ:
+GitHub: https://github.com/ifywnx/demo-atbmtt
 
-https://ifywnx.github.io/demo-atbmtt/
+Website dùng HTML, CSS, JavaScript thuần, **không cần API key, database hay backend**. GitHub kết nối Vercel: push lên nhánh main sẽ tự động triển khai bản production.
 
-Nếu link chưa truy cập được, vào repository **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: main → /(root) → Save**. GitHub cần thời gian xuất bản lần đầu.
+### Hướng dẫn trình chiếu trên lớp
 
-Chạy thử trên máy:
+1. Trên máy chiếu, mở **https://demo-atbmtt.vercel.app/**, chọn nút **Trình chiếu** trên thanh trên cùng (hoặc F11 trong trình duyệt).
+2. Chờ hệ thống hiện khóa công khai **SẴN SÀNG**.
+3. Nhấn **Ký hồ sơ** trên hero (hoặc **Tạo hồ sơ & ký số** trong thẻ bệnh án). Mã SHA-256 và chữ ký RSA-PSS sẽ được tạo thật trong trình duyệt.
+4. Nhấn **Xác minh**, quan sát trạng thái **toàn vẹn / hợp lệ** màu xanh.
+5. Nhấn **Thử tấn công** hoặc vào kịch bản **Thay đổi liều thuốc**: chuyển từ 1 viên/lần sang 4 viên/lần.
+6. Trong khu vực **Cùng một hồ sơ. Hai trạng thái.**, chỉ vào phần liều thuốc khác nhau và bấm **Xác minh ngay**. Kết quả hiện **TAMPERING DETECTED** màu đỏ.
+7. Nhấn **Khôi phục bản gốc**, xác minh lại → trạng thái hợp lệ. Có thể thử thêm đổi tên thuốc hoặc giả mạo chữ ký số.
+8. **Chạy tự kiểm thử** trong Nhật ký (4 tình huống crypto thật). **Xuất bằng chứng JSON** để lưu kết quả minh họa.
+
+Các trạng thái của dashboard và bảng so sánh lấy từ kết quả của ứng dụng ký số thật, không sử dụng hash hay kết quả giả định. Bốn chặng phía trên kể lại kịch bản demo; quy trình mật mã sáu bước chi tiết nằm ở mục Quy trình bảo vệ.
+
+### Chạy tại máy
 
 ~~~bash
 git clone https://github.com/ifywnx/demo-atbmtt.git
@@ -22,18 +33,7 @@ cd demo-atbmtt
 python3 -m http.server 8000
 ~~~
 
-Mở http://localhost:8000. **Không dùng đường dẫn file://** vì Web Crypto yêu cầu secure context (HTTPS hoặc localhost).
-
-## Kịch bản trình bày cho giảng viên
-
-1. **Mở website** → trình duyệt tự tạo cặp khóa RSA 2048-bit. Chờ thấy “SẴN SÀNG”.
-2. **Bấm “Tạo hồ sơ & ký số”** → chuẩn hóa JSON, tính SHA-256 và tạo chữ ký RSA-PSS thật bằng khóa bí mật.
-3. **Bấm “Kiểm tra tính toàn vẹn”** → hash trùng khớp, chữ ký xác minh thành công: **AN TOÀN**.
-4. **Bấm “Thay đổi liều thuốc”** → đổi từ “1 viên/lần” thành “4 viên/lần” sau khi ký.
-5. **Bấm “Kiểm tra tính toàn vẹn”** → SHA-256 khác bản gốc, RSA-PSS không hợp lệ: **PHÁT HIỆN CAN THIỆP**.
-6. **Bấm “Khôi phục bản gốc”**, sau đó **“Kiểm tra tính toàn vẹn”** → trở lại trạng thái hợp lệ.
-7. Có thể thử **“Sửa tên thuốc”** hoặc **“Giả mạo chữ ký”**. Với giả mạo chữ ký, **hash vẫn có thể khớp nhưng RSA-PSS không hợp lệ**.
-8. **“Chạy tự kiểm thử”** ở phần Nhật ký kiểm tra kiểm tra 4 tình huống mật mã độc lập; **“Xuất bằng chứng JSON”** xuất thông tin phục vụ báo cáo.
+Mở http://localhost:8000. **Không dùng file://** vì Web Crypto cần môi trường an toàn (HTTPS hoặc localhost).
 
 ### Cách trả lời câu hỏi “Bài demo thực sự hoạt động không?”
 
@@ -69,6 +69,8 @@ demo-atbmtt/
 ├── index.html   # Giao diện hồ sơ, tấn công, xác minh, log
 ├── styles.css   # Giao diện xanh - trắng responsive
 ├── app.js       # SHA-256, RSA-PSS, mô phỏng sửa đổi, xuất JSON
+├── showcase.css # Giao diện trình chiếu và hiệu ứng chuyển động
+├── showcase.js  # Dashboard tiến trình, so sánh & fullscreen
 └── README.md    # Hướng dẫn chạy và thuyết trình
 ~~~
 
