@@ -93,3 +93,10 @@
 @media(max-width:1130px){.role-workspace{grid-template-columns:1fr;gap:11px}.role-transfer{flex-direction:row;min-height:42px;gap:12px}.role-transfer .transfer-line{height:1px;flex:1}.role-transfer>div{height:37px;width:37px}.role-card{padding:21px 23px}.auto-console{grid-template-columns:1fr}.auto-console-controls{flex-wrap:wrap;justify-content:flex-start}}
 @media(max-width:630px){.auto-console{padding:14px;gap:12px}.auto-console-info strong{font-size:11px}.auto-console-info span{font-size:9px}.auto-console-icon{width:35px;height:35px}.auto-console-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px}.auto-console-controls .auto-start{grid-column:1/-1}.auto-console-controls button{min-height:38px}.role-card{padding:18px 16px}.role-head{margin-bottom:15px}.role-head h3{font-size:15px}.role-transfer>span:first-child{font-size:8px}.history-head{padding:19px 16px;flex-direction:column;align-items:flex-start;gap:13px}.history-sign-btn{width:100%;justify-content:center}.revision-list{padding:11px}.revision-row{padding:10px;gap:9px}.revision-counter{width:32px;height:32px;font-size:10px}.revision-info strong{font-size:10px}.revision-info span{font-size:9px}.revision-row button{padding:8px;font-size:9px}.history-note{padding:12px 14px}}
 @media(prefers-reduced-motion:reduce){.auto-track>div{transition:none}}
+
+
+/* Identity caveat: SHA-256 of the imported public key, not a trusted identity certificate. */
+.recipient-fingerprint{background:#f8fbfe;border:1px solid #e0ebf3;border-radius:9px;padding:12px 13px;margin-top:13px}
+.recipient-fingerprint>span{display:block;font-size:9px;font-weight:800;letter-spacing:1px;color:#6f90a7;margin-bottom:7px}
+.recipient-fingerprint code{display:block;word-break:break-all;line-height:1.6;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;color:#276782}
+.recipient-fingerprint small{display:block;line-height:1.6;font-size:10px;color:#96aebd;margin-top:8px}
