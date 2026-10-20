@@ -39,7 +39,8 @@ async function independentVerify(pkg,currentRecord){
   const signature=decodeSignature(pkg.signatureBase64);
   const jwk=pkg.publicKeyJwk;
   if(!jwk||jwk.kty!=='RSA'||typeof jwk.n!=='string'||typeof jwk.e!=='string')throw Error('Public Key không hợp lệ.');
-  const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSA-PSS',hash:'SHA-256'},false,['verify']);
+  const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSA-PSS',hash:'SHA-256'},true,['verify']);
+  if(key.algorithm.modulusLength!==2048)throw Error('Public Key không phải RSA 2048-bit.');
   const signatureValid=await crypto.subtle.verify({name:'RSA-PSS',saltLength:32},key,signature,data);
   // Independent public-key fingerprint: compare this with the doctor's
   // display over a separate trusted channel before trusting signer identity.
