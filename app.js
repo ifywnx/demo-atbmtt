@@ -372,7 +372,7 @@ async function initialize() {
   renderLogs();
   await updateLiveHash();
   if (!window.isSecureContext || !crypto || !crypto.subtle) {
-    const msg = 'Web Crypto yêu cầu HTTPS hoặc localhost. Hãy mở website trên GitHub Pages.';
+    const msg = 'Web Crypto yêu cầu HTTPS hoặc localhost. Hãy mở https://demo-atbmtt.vercel.app/';
     $('keySidebar').textContent = 'Không thể khởi tạo khóa';
     setLabel('publicKeyResult', 'Chưa hỗ trợ', 'result-bad');
     setVerdict('bad', 'Không thể dùng Web Crypto', msg);
@@ -420,6 +420,8 @@ window.MedSealDemo = Object.freeze({
   ready() { return Boolean(keyPair && !busy); },
   signed() { return Boolean(signed); },
   history() { return revisionHistory.map(item => ({ ...item, record: { ...item.record } })); },
+  verification() { return lastVerification ? { ...lastVerification } : null; },
+  fingerprint() { return $('keyFingerprint').textContent; },
   async exportPackage() {
     if (!signed || !keyPair) throw new Error('Chưa ký bệnh án.');
     const publicKeyJwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
