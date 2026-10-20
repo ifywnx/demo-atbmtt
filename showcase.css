@@ -89,8 +89,8 @@ body {
 .showcase-visual{width:37%;position:absolute;right:0;top:0;bottom:0;overflow:hidden;display:grid;place-items:center;pointer-events:none}
 .radar-circles{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:360px;height:360px;border:1px solid rgba(88,188,248,.19);border-radius:50%;box-shadow:0 0 40px rgba(29,170,251,.06)}
 .radar-circles i{position:absolute;border-radius:50%;border:1px solid rgba(91,195,250,.23);inset:36px}
-.radar-circles i:nth-child(2){inset:78px;border:1px dashed rgba(98,218,252,.38);animation:radarSpin 42s linear infinite}
-.radar-circles i:nth-child(3){inset:-25px;border-style:dashed;opacity:.42;animation:radarSpin 55s linear infinite reverse}
+.radar-circles i:nth-child(2){inset:78px;border:1px dashed rgba(98,218,252,.38);animation:orbitalSpin 42s linear infinite}
+.radar-circles i:nth-child(3){inset:-25px;border-style:dashed;opacity:.42;animation:orbitalSpin 55s linear infinite reverse}
 .scan-beam{position:absolute;width:360px;height:360px;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);background:conic-gradient(from 10deg,transparent 0deg,rgba(32,172,247,.15) 52deg,transparent 86deg,transparent 360deg);animation:radarSpin 9s linear infinite}
 .core-mark{width:133px;height:133px;border-radius:36px;display:grid;place-items:center;z-index:1;background:linear-gradient(145deg,rgba(45,161,224,.22),rgba(26,76,129,.28));border:1px solid rgba(128,213,252,.36);box-shadow:0 0 0 16px rgba(56,166,229,.042),0 0 65px rgba(45,167,229,.15),inset 0 1px 20px rgba(255,255,255,.04);transform:rotate(-11deg)}
 .core-mark .ico{width:66px;height:66px;color:#96ddff;stroke-width:1.2;filter:drop-shadow(0 0 16px rgba(49,183,255,.36))}
@@ -105,6 +105,7 @@ body {
 .hero-showcase.demo-alert .core-mark{border-color:rgba(245,110,125,.73);box-shadow:0 0 0 16px rgba(229,87,103,.08),0 0 80px rgba(241,86,109,.24);animation:alarmCore 1.4s ease-in-out infinite}
 .hero-showcase.demo-alert .core-mark .ico{color:#ff9ba2}
 @keyframes radarSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes orbitalSpin{to{transform:rotate(360deg)}}
 @keyframes tagFloat{50%{transform:translateY(-7px)}}
 @keyframes signalPulse{50%{opacity:.55;box-shadow:0 0 0 7px rgba(30,195,161,.06)}}
 @keyframes alarmCore{50%{box-shadow:0 0 0 23px rgba(229,87,103,.03),0 0 65px rgba(241,86,109,.42)}}
