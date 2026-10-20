@@ -85,6 +85,15 @@ Trong mục **Cập nhật hợp lệ và ký lại**: sửa thuốc hoặc li�
 
 Lịch sử chỉ nằm trong bộ nhớ tab, mất khi tải lại. Các chữ ký riêng chứng minh nội dung từng bản, nhưng lịch sử chưa có cơ sở dữ liệu và log chống sửa đổi.
 
+## Bản FINAL dành cho buổi trình chiếu
+
+- **Website chính thức:** https://demo-atbmtt.vercel.app/
+- **Hướng dẫn thuyết trình 5 phút + câu hỏi phản biện:** [PRESENTER_GUIDE.md](./PRESENTER_GUIDE.md)
+- **Tự kiểm thử mật mã trong website:** Nhấn **Chạy tự kiểm thử** tại Nhật ký (mong đợi 4/4).
+- **Kiểm thử giao thức trên Node.js 20+:** chạy **node tests/crypto-smoke.mjs** ở thư mục repo (7 tình huống SHA-256/RSA-PSS).
+- **Fingerprint của dược sĩ:** Có thể so với fingerprint SHA-256/SPKI ở máy bác sĩ qua kênh tin cậy; fingerprint khớp không tự chứng nhận danh tính người ký.
+- **Trước giờ báo cáo:** tải lại web để bắt đầu phiên mới, chạy tự kiểm thử, chạy demo tự động một lượt, thử xuất/nhập JSON trên hai cửa sổ.
+
 ## Phạm vi bảo mật và hạn chế
 
 - Đây là **mô hình giáo dục**, toàn bộ tên người và bệnh án đều là **dữ liệu giả lập**. Không dùng để kê thuốc hay lưu trữ hồ sơ bệnh nhân thật.
@@ -104,6 +113,10 @@ demo-atbmtt/
 ├── showcase.js  # Dashboard tiến trình, so sánh & fullscreen
 ├── advanced.css # Giao diện 2 vai trò, tự động & phiên bản
 ├── advanced.js  # Xác minh độc lập giữa 2 máy, phiên bản & playback
+├── favicon.svg  # Biểu tượng thương hiệu MEDSEAL
+├── tests/
+│   └── crypto-smoke.mjs # 7 tình huống kiểm thử mật mã
+├── PRESENTER_GUIDE.md  # Kịch bản thuyết trình 5 phút
 └── README.md    # Hướng dẫn chạy và thuyết trình
 ~~~
 
