@@ -41,7 +41,11 @@ async function independentVerify(pkg,currentRecord){
   if(!jwk||jwk.kty!=='RSA'||typeof jwk.n!=='string'||typeof jwk.e!=='string')throw Error('Public Key không hợp lệ.');
   const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSA-PSS',hash:'SHA-256'},false,['verify']);
   const signatureValid=await crypto.subtle.verify({name:'RSA-PSS',saltLength:32},key,signature,data);
-  return {hashValid,signatureValid,valid:hashValid&&signatureValid};
+  // Independent public-key fingerprint: compare this with the doctor's
+  // display over a separate trusted channel before trusting signer identity.
+  const spki=await crypto.subtle.exportKey('spki',key);
+  const fingerprint=toHex(await crypto.subtle.digest('SHA-256',spki));
+  return {hashValid,signatureValid,valid:hashValid&&signatureValid,fingerprint};
 }
 function result(type,title,description){
   const node=el('pharmaResult');
@@ -65,13 +69,14 @@ async function exportSigned(){
 }
 async function importFile(file){
   if(!file)return;
-  portable=null;el('pharmaDose').disabled=true;el('pharmaVerifyBtn').disabled=true;
+  portable=null;label('pharmaFingerprint','Chưa có');el('pharmaDose').disabled=true;el('pharmaVerifyBtn').disabled=true;
   result('waiting','Đang đọc hồ sơ','Đang kiểm tra cấu trúc và chữ ký được gửi từ máy bác sĩ.');
   try{
     if(file.size>maxBytes||file.size<10)throw Error('Tệp JSON phải nhỏ hơn 128 KB.');
     const pkg=JSON.parse(await file.text());
     const check=await independentVerify(pkg,pkg.signedRecord);
     portable=pkg;el('pharmaDose').value=pkg.signedRecord.dosage;
+    label('pharmaFingerprint',check.fingerprint);
     el('pharmaDose').disabled=false;el('pharmaVerifyBtn').disabled=false;
     result(check.valid?'good':'bad',
       check.valid?'Gói hồ sơ hợp lệ khi nhận':'Gói hồ sơ không hợp lệ',
@@ -173,7 +178,8 @@ async function start(){
     renderHistory();progress(1,'Cảnh 1/4 · Đã tạo chữ ký số SHA-256 + RSA-PSS.');
     await waitFor(1650,token);
     progress(1,'Cảnh 2/4 · Đang xác minh hồ sơ gốc...');
-    if(!await api.verify())throw Error('Không thể xác minh hồ sơ gốc.');
+    if(!await api.verify() || !api.verification()?.hashValid || !api.verification()?.signatureValid)
+      throw Error('Bệnh án gốc chưa vượt qua đủ hai phép kiểm tra.');
     if(token!==activeRun)return;
     progress(2,'Cảnh 2/4 · Hồ sơ còn nguyên vẹn, chữ ký hợp lệ.');
     await waitFor(1650,token);
@@ -184,7 +190,9 @@ async function start(){
     progress(3,'Cảnh 4/4 · Đang phát hiện dấu hiệu can thiệp...');
     const valid=await api.verify();
     if(token!==activeRun)return;
-    if(valid)throw Error('Bản bị sửa đã không được phát hiện như mong đợi.');
+    const evidence=api.verification();
+    if(valid || !evidence || evidence.valid!==false || evidence.hashValid!==false || evidence.signatureValid!==false)
+      throw Error('Bước kiểm tra chưa chứng minh được dữ liệu đã bị sửa; không đưa ra kết luận giả định.');
     progress(4,'HOÀN TẤT · Phát hiện sửa liều thuốc sau ký.');
     el('so-sanh').scrollIntoView({behavior:'smooth',block:'start'});
   }catch(e){if(e.message!=='ABORTED')label('autoStatus','Lỗi demo: '+e.message);}
