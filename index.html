@@ -7,6 +7,7 @@
   <meta name="description" content="MEDSEAL - Demo bảo vệ tính toàn vẹn bệnh án và đơn thuốc điện tử bằng SHA-256 và chữ ký số RSA-PSS 2048-bit.">
   <title>MEDSEAL | Demo SHA-256 & RSA-PSS</title>
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./showcase.css">
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -55,28 +56,29 @@
     <main class="main-content" id="tong-quan">
       <div class="topbar">
         <div class="breadcrumbs">PHÒNG THÍ NGHIỆM <span>/</span> BẢO VỆ HỒ SƠ Y TẾ</div>
-        <div class="topbar-right"><span class="dot"></span> DEMO TẠI TRÌNH DUYỆT <span class="top-separator"></span> SHA-256 + RSA-PSS</div>
+        <div class="topbar-right"><span class="topbar-live"><span class="dot"></span> SYSTEM ONLINE</span><span class="top-separator"></span><button id="presentBtn" class="presentation-button" type="button" title="Bật hoặc tắt chế độ trình chiếu"><svg class="ico"><use href="#i-activity"/></svg><span id="presentLabel">Trình chiếu</span></button></div>
       </div>
 
-      <section class="hero">
+      <section class="hero hero-showcase" aria-label="Trình diễn bảo vệ tính toàn vẹn hồ sơ">
+        <div class="hero-noise" aria-hidden="true"></div>
         <div class="hero-text">
-          <div class="eyebrow"><span class="eyebrow-line"></span> GIẢI PHÁP BẢO VỆ TÍNH TOÀN VẸN</div>
-          <h1>Một thay đổi nhỏ.<br><span>Một bằng chứng rõ ràng.</span></h1>
-          <p>Hệ thống mô phỏng cách bệnh viện phát hiện bệnh án, đơn thuốc điện tử bị chỉnh sửa sau khi bác sĩ ký bằng <strong>SHA-256</strong> và <strong>chữ ký số RSA-PSS</strong>.</p>
-          <div class="hero-tags"><span>SHA-256</span><span>RSA-PSS · 2048 BIT</span><span>WEB CRYPTO API</span></div>
-          <a class="hero-link" href="#ho-so">Bắt đầu demo <svg class="ico"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="hero-visual" aria-hidden="true">
-          <div class="orb orbit-one"></div><div class="orb orbit-two"></div>
-          <div class="hero-document">
-            <div class="doc-overline">ELECTRONIC MEDICAL RECORD</div>
-            <div class="doc-symbol"><svg class="ico"><use href="#i-shield"/></svg></div>
-            <div class="doc-title">Digital Integrity</div>
-            <div class="doc-line width-long"></div><div class="doc-line width-mid"></div>
-            <div class="doc-divider"></div>
-            <div class="doc-footer"><span>SHA-256</span><span>RSA-PSS</span><span class="verified-mark"><svg class="ico"><use href="#i-check"/></svg></span></div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> MEDSEAL / SECURITY DEMONSTRATION <span class="live-tag"><span></span> LIVE LAB</span></div>
+          <h1>Mỗi hồ sơ đều có<br><span>một dấu vân tay số.</span></h1>
+          <p>Thực hiện <strong>ký số thật</strong>, chủ động chỉnh sửa đơn thuốc và xem cách <strong>SHA-256 + RSA-PSS</strong> phát hiện dữ liệu bị can thiệp ngay khi xác minh.</p>
+          <div class="hero-quick-actions">
+            <button id="quickSignBtn" class="showcase-action primary" type="button" disabled><svg class="ico"><use href="#i-lock"/></svg> Ký hồ sơ <svg class="ico action-arrow"><use href="#i-arrow"/></svg></button>
+            <button id="quickVerifyBtn" class="showcase-action ghost" type="button" disabled><svg class="ico"><use href="#i-check"/></svg> Xác minh</button>
+            <button id="quickAttackBtn" class="showcase-action red" type="button" disabled><svg class="ico"><use href="#i-alert"/></svg> Thử tấn công</button>
           </div>
-          <div class="hero-floating"><span class="small-shield"><svg class="ico"><use href="#i-lock"/></svg></span><div><strong>Cryptographic proof</strong><small>Xác minh bằng mật mã học</small></div></div>
+          <div class="hero-bottom"><span><span class="signal-dot"></span> WEB CRYPTO API</span><span>SHA-256</span><span>RSA-PSS / 2048-BIT</span></div>
+        </div>
+        <div class="showcase-visual" aria-hidden="true">
+          <div class="radar-circles"><i></i><i></i><i></i></div>
+          <div class="scan-beam"></div>
+          <div class="core-mark"><svg class="ico"><use href="#i-shield"/></svg></div>
+          <div class="orbit-tag tag-top"><span class="tiny-cube"></span> INTEGRITY CONTROL</div>
+          <div class="orbit-tag tag-bottom"><span class="tiny-check">✓</span> CRYPTOGRAPHIC PROOF</div>
+          <div class="radar-cross cross-a"></div><div class="radar-cross cross-b"></div>
         </div>
       </section>
 
@@ -84,6 +86,17 @@
         <div class="metric-card"><div class="metric-icon blue"><svg class="ico"><use href="#i-activity"/></svg></div><div><span>THUẬT TOÁN BĂM</span><strong>SHA-256</strong><small>Dấu vân tay 256-bit · 64 ký tự HEX</small></div></div>
         <div class="metric-card"><div class="metric-icon teal"><svg class="ico"><use href="#i-key"/></svg></div><div><span>CHỮ KÝ SỐ</span><strong>RSA-PSS</strong><small>Cặp khóa RSA 2048-bit</small></div></div>
         <div class="metric-card"><div class="metric-icon violet"><svg class="ico"><use href="#i-shield"/></svg></div><div><span>TRẠNG THÁI HỒ SƠ</span><strong id="metricStatus">Chưa ký số</strong><small id="metricDetail">Sẵn sàng tạo bằng chứng</small></div></div>
+      </section>
+
+      <section class="mission-board" aria-label="Hành trình demo trực tiếp">
+        <div class="mission-head"><div><span class="mission-kicker">LIVE EXPERIMENT / 01</span><h2>Trình tự minh chứng</h2></div><div id="missionState" class="mission-status"><span class="mission-glow"></span><span id="missionStatusText">Sẵn sàng bắt đầu</span></div></div>
+        <div class="mission-track" id="missionTrack">
+          <div class="mission-step is-active" data-mission="sign"><span class="mission-number">01</span><div><strong>Ký bệnh án</strong><small>SHA-256 + RSA-PSS</small></div><svg class="ico"><use href="#i-check"/></svg></div>
+          <div class="mission-step" data-mission="verify"><span class="mission-number">02</span><div><strong>Xác minh hợp lệ</strong><small>Hai phép kiểm tra</small></div><svg class="ico"><use href="#i-check"/></svg></div>
+          <div class="mission-step" data-mission="tamper"><span class="mission-number">03</span><div><strong>Sửa dữ liệu</strong><small>1 viên → 4 viên</small></div><svg class="ico"><use href="#i-check"/></svg></div>
+          <div class="mission-step" data-mission="detect"><span class="mission-number">04</span><div><strong>Phát hiện can thiệp</strong><small>Hash / chữ ký sai</small></div><svg class="ico"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="mission-foot"><span><span class="mission-led"></span> Tạo khóa tạm, ký số trên máy</span><a href="#quy-trinh">Xem đầy đủ quy trình 6 bước <svg class="ico"><use href="#i-arrow"/></svg></a></div>
       </section>
 
       <div class="section-heading" id="ho-so"><div><div class="section-kicker">01 / BỆNH ÁN ĐIỆN TỬ</div><h2>Tạo và ký hồ sơ mẫu</h2><p>Thông tin y tế giả lập phục vụ học tập, không dùng cho bệnh nhân thật.</p></div><span class="section-step">BƯỚC 01 - 04</span></div>
@@ -119,6 +132,26 @@
         <button class="attack-card" type="button" id="signatureAttackBtn" disabled><span class="attack-icon"><svg class="ico"><use href="#i-key"/></svg></span><div><small>KỊCH BẢN 03</small><h3>Giả mạo chữ ký</h3><p>Can thiệp vào bytes chữ ký, trong khi nội dung hồ sơ vẫn giữ nguyên.</p><span class="attack-link">Thực hiện mô phỏng <svg class="ico"><use href="#i-arrow"/></svg></span></div></button>
       </section>
 
+      <section class="compare-stage" id="so-sanh" aria-label="So sánh phiên bản đã ký với phiên bản hiện tại">
+        <div class="compare-heading"><div><span class="section-kicker">03 / PHÂN TÍCH BẰNG CHỨNG</span><h2>Cùng một hồ sơ. Hai trạng thái.</h2><p>So sánh trực tiếp nội dung sau ký — thay đổi nào cũng có thể kiểm chứng.</p></div><span id="compareBadge" class="compare-badge is-idle">CHƯA CÓ BẰNG CHỨNG</span></div>
+        <div class="compare-layout">
+          <div class="compare-card compare-original"><div class="compare-card-top"><span class="compare-dot"></span><span>BẢN ĐÃ KÝ / ORIGINAL</span><svg class="ico"><use href="#i-lock"/></svg></div>
+            <div class="compare-person"><div class="avatar-block">EMR</div><div><strong id="originalPatient">Chưa có dữ liệu ký</strong><span id="originalId">—</span></div></div>
+            <div class="compare-data-row"><span>Thuốc</span><strong id="originalMedicine">—</strong></div>
+            <div class="compare-data-row"><span>Liều dùng</span><strong id="originalDose">—</strong></div>
+            <div class="compare-hash"><span>SHA-256 BAN ĐẦU</span><code id="originalMiniHash">Chưa tạo</code></div>
+          </div>
+          <div class="compare-center" aria-hidden="true"><span class="compare-center-line"></span><div><svg class="ico"><use href="#i-arrow"/></svg></div><span class="compare-center-line"></span></div>
+          <div class="compare-card compare-current"><div class="compare-card-top"><span class="compare-dot"></span><span>HỒ SƠ HIỆN TẠI / LIVE</span><svg class="ico"><use href="#i-activity"/></svg></div>
+            <div class="compare-person"><div class="avatar-block">LIVE</div><div><strong id="currentPatientView">Nguyễn Minh Anh</strong><span id="currentIdView">BN-2026-0158</span></div></div>
+            <div class="compare-data-row"><span>Thuốc</span><strong id="currentMedicineView">Amoxicillin 500 mg</strong></div>
+            <div class="compare-data-row"><span>Liều dùng</span><strong id="currentDoseView">1 viên/lần</strong></div>
+            <div class="compare-hash"><span>SHA-256 HIỆN TẠI</span><code id="currentMiniHash">Đang tạo hash...</code></div>
+          </div>
+        </div>
+        <div id="compareVerdict" class="compare-verdict"><svg class="ico"><use href="#i-info"/></svg><div><strong id="compareVerdictTitle">Đang chờ chữ ký đầu tiên</strong><p id="compareVerdictDesc">Hãy ký bệnh án và kiểm tra để chứng minh dữ liệu toàn vẹn.</p></div><button id="compareVerifyBtn" type="button" disabled>Xác minh ngay <svg class="ico"><use href="#i-arrow"/></svg></button></div>
+      </section>
+
       <section class="lower-grid" id="quy-trinh">
         <article class="panel process-panel"><div class="panel-head"><div class="panel-heading-icon"><svg class="ico"><use href="#i-shield"/></svg></div><div><h3>Quy trình SHA-256 + RSA-PSS</h3><p>6 bước bảo vệ hồ sơ đúng nội dung báo cáo</p></div></div><ol class="process-list"><li><span class="number">01</span><div><strong>Key Generation</strong><small>Khởi tạo cặp khóa RSA 2048-bit</small></div></li><li><span class="number">02</span><div><strong>Canonicalization</strong><small>Chuẩn hóa JSON, thứ tự khóa cố định, UTF-8</small></div></li><li><span class="number">03</span><div><strong>Hashing</strong><small>Tạo SHA-256 cho dữ liệu chuẩn hóa</small></div></li><li><span class="number">04</span><div><strong>Digital Signing</strong><small>Ký bằng RSA-PSS với khóa bí mật</small></div></li><li><span class="number">05</span><div><strong>Storing</strong><small>Lưu bản ghi, mã băm và chữ ký trong phiên demo</small></div></li><li><span class="number">06</span><div><strong>Verification</strong><small>Băm lại và kiểm tra chữ ký bằng khóa công khai</small></div></li></ol></article>
         <article class="panel log-panel" id="nhat-ky"><div class="panel-head"><div class="panel-heading-icon"><svg class="ico"><use href="#i-terminal"/></svg></div><div><h3>Nhật ký sự kiện</h3><p>Theo dõi các bước ký và xác minh</p></div><button type="button" id="clearLogBtn" class="mini-button">Xóa log</button></div><div class="log-list" id="logs" aria-live="polite"><div class="log-empty">Chưa có sự kiện.</div></div><div class="log-bottom"><span><span class="online-dot"></span> THAO TÁC CHỈ TRÊN THIẾT BỊ</span><button type="button" id="testBtn">Chạy tự kiểm thử</button></div></article>
@@ -128,7 +161,13 @@
       <footer class="main-footer"><p>MEDSEAL · Mô hình giáo dục, không phải hệ thống y tế thực tế.</p><span>Nhóm 5 · N02 · An toàn và Bảo mật thông tin · 2026</span></footer>
     </main>
   </div>
+  <div id="showcaseNotice" class="showcase-notice" role="status" aria-live="polite" aria-atomic="true">
+    <span id="showcaseNoticeIcon" class="showcase-notice-icon"><svg class="ico"><use href="#i-check"/></svg></span>
+    <span class="showcase-notice-copy"><small>MEDSEAL / INTEGRITY MONITOR</small><strong id="showcaseNoticeTitle">Verification complete</strong><span id="showcaseNoticeDesc">Kết quả kiểm tra đã sẵn sàng.</span></span>
+    <button id="showcaseNoticeClose" type="button" aria-label="Đóng thông báo"><svg class="ico"><use href="#i-x"/></svg></button>
+  </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./app.js"></script>
+  <script type="module" src="./showcase.js"></script>
 </body>
 </html>
