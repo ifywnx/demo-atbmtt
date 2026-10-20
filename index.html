@@ -176,6 +176,7 @@
             <div class="pharma-field"><label for="pharmaDose">Liều dùng nhận được</label><input id="pharmaDose" type="text" placeholder="Nhập hồ sơ trước" maxlength="100" disabled></div>
             <button id="pharmaVerifyBtn" type="button" class="role-btn dark" disabled><svg class="ico"><use href="#i-check"/></svg> Xác minh hồ sơ nhập</button>
             <div id="pharmaResult" class="pharma-result waiting" role="status" aria-live="polite"><svg class="ico"><use href="#i-info"/></svg><div><strong>Chưa có hồ sơ nhập</strong><span>Tải tệp JSON để xác minh giữa hai máy</span></div></div>
+            <div class="recipient-fingerprint"><span>VÂN TAY PUBLIC KEY NHẬN ĐƯỢC</span><code id="pharmaFingerprint">Chưa có</code><small>Đối chiếu với SHA-256 Public Key ở máy bác sĩ qua kênh tin cậy.</small></div>
             <p class="role-help"><strong>Lưu ý:</strong> Public Key lấy từ file chỉ chứng minh chữ ký tương ứng với khóa đó, chưa chứng nhận người ký là bác sĩ thật. Bệnh án trong demo là dữ liệu giả lập.</p>
           </article>
         </div>
