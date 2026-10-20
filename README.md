@@ -54,6 +54,37 @@ Bảy trường: mã bệnh án, ngày khám, họ tên giả lập, bác sĩ, c
 
 JSON bao gồm bản ghi đã ký, hash ban đầu, chữ ký Base64, **Public Key ở định dạng JWK**, bản ghi đang kiểm tra, hash hiện tại và kết quả xác minh gần nhất. **Không chứa Private Key.**
 
+## Tính năng mở rộng cho demo trước lớp (2026)
+
+### 1. Ký hồ sơ trên máy bác sĩ, kiểm tra trên máy dược sĩ
+
+1. Máy **A** mở https://demo-atbmtt.vercel.app/, chờ khóa RSA sẵn sàng, chọn **Tạo hồ sơ & ký số**.
+2. Tại **Góc bác sĩ**, chọn **Xuất hồ sơ đã ký (.json)**. File chứa hồ sơ, SHA-256, chữ ký RSA-PSS 2048-bit và **chỉ Public Key JWK**, tuyệt đối không chứa Private Key.
+3. Chuyển tệp JSON sang máy **B**. Máy B mở đúng website (không cần cùng khóa, tài khoản hoặc phiên trình duyệt).
+4. Tại **Góc dược sĩ**, chọn tệp JSON rồi bấm **Xác minh hồ sơ nhập**.
+5. Khi tệp nguyên vẹn, kết quả **HỢP LỆ · TOÀN VẸN**. Sửa trường **Liều dùng nhận được** thành "4 viên/lần" rồi xác minh lần nữa, hệ thống báo **PHÁT HIỆN CAN THIỆP**.
+
+**Tại sao kiểm chứng được bằng máy khác?** Dược sĩ chỉ cần bản ghi đã ký, chữ ký RSA-PSS và Public Key. Web Crypto tự băm lại dữ liệu chuẩn hóa rồi xác minh chữ ký công khai. Khóa bí mật không cần và không được gửi sang máy B.
+
+**Giới hạn quan trọng:** Public Key gửi cùng file chưa chứng minh khóa thuộc một bác sĩ cụ thể. Muốn xác thực danh tính người ký cần thiết lập tin cậy bên ngoài, ví dụ chứng thư số và PKI. Người nhận phải xác nhận Public Key qua kênh tin cậy. Đây là demo tính toàn vẹn, **không phải chữ ký y tế có giá trị pháp lý**.
+
+### 2. Demo tự động có tạm dừng
+
+Ở đầu trang, sử dụng **Chạy demo** để xem bốn cảnh diễn ra với các phép mật mã thật:
+
+1. Tạo bản ghi mẫu và ký RSA-PSS.
+2. Xác minh bản ghi nguyên gốc thành công.
+3. Thay liều thuốc từ 1 lên 4 viên/lần (không cập nhật chữ ký).
+4. Xác minh lần hai để phát hiện thay đổi.
+
+**Tạm dừng / Tiếp tục** tạm dừng giữa các cảnh; **Dừng** kết thúc chuỗi và có thể chạy lại. Không tự giả mạo trạng thái đã xác minh, mỗi bước đợi Web Crypto trả kết quả thật.
+
+### 3. Lịch sử phiên bản ký lại
+
+Trong mục **Cập nhật hợp lệ và ký lại**: sửa thuốc hoặc liều dùng trên form ở trên, bấm **Ký phiên bản mới**. Phiên bản V1, V2, V3... có chữ ký RSA-PSS và SHA-256 riêng, cùng nút **Kiểm tra Vn** để kiểm tra bản lưu.
+
+Lịch sử chỉ nằm trong bộ nhớ tab, mất khi tải lại. Các chữ ký riêng chứng minh nội dung từng bản, nhưng lịch sử chưa có cơ sở dữ liệu và log chống sửa đổi.
+
 ## Phạm vi bảo mật và hạn chế
 
 - Đây là **mô hình giáo dục**, toàn bộ tên người và bệnh án đều là **dữ liệu giả lập**. Không dùng để kê thuốc hay lưu trữ hồ sơ bệnh nhân thật.
@@ -71,6 +102,8 @@ demo-atbmtt/
 ├── app.js       # SHA-256, RSA-PSS, mô phỏng sửa đổi, xuất JSON
 ├── showcase.css # Giao diện trình chiếu và hiệu ứng chuyển động
 ├── showcase.js  # Dashboard tiến trình, so sánh & fullscreen
+├── advanced.css # Giao diện 2 vai trò, tự động & phiên bản
+├── advanced.js  # Xác minh độc lập giữa 2 máy, phiên bản & playback
 └── README.md    # Hướng dẫn chạy và thuyết trình
 ~~~
 
