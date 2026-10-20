@@ -21,6 +21,7 @@ const INITIAL = Object.freeze({
 let keyPair = null;
 let signed = null;
 let lastVerification = null;
+const revisionHistory = [];
 let calculationId = 0;
 let toastTimer = null;
 const entries = [];
@@ -177,6 +178,13 @@ async function signRecord(event) {
       originalSignature: new Uint8Array(signature),
       storedSignature: new Uint8Array(signature)
     };
+    revisionHistory.push({
+      version: revisionHistory.length + 1,
+      record: { ...record },
+      hashSha256: hash,
+      signatureBase64: bytesToBase64(signature),
+      signedAt: record.signedAt
+    });
     $('savedHash').textContent = hash;
     $('savedHash').classList.remove('muted');
     $('signedAt').textContent = 'Đã ký: ' + formatTime(record.signedAt);
@@ -184,9 +192,14 @@ async function signRecord(event) {
     logEvent('Ký hồ sơ thành công', 'Chuẩn hóa JSON → SHA-256 → RSA-PSS 2048-bit. Đã lưu bản gốc, hash và chữ ký.', 'ok');
     toast('Đã ký hồ sơ bằng RSA-PSS. Bây giờ hãy kiểm tra hoặc mô phỏng sửa dữ liệu.');
     await updateLiveHash();
+    window.dispatchEvent(new CustomEvent('medseal:signed', {
+      detail: { version: revisionHistory.length, record: { ...record }, hash }
+    }));
+    return true;
   } catch (error) {
     logEvent('Lỗi ký hồ sơ', error.message, 'error');
     toast('Không thể ký hồ sơ: ' + error.message, true);
+    return false;
   } finally {
     busy = false; updateButtons();
   }
@@ -229,9 +242,14 @@ async function verifyRecord() {
       toast('Cảnh báo: hồ sơ hoặc chữ ký đã bị chỉnh sửa!', true);
     }
     await updateLiveHash();
+    window.dispatchEvent(new CustomEvent('medseal:verified', {
+      detail: { ...lastVerification, version: revisionHistory.length }
+    }));
+    return valid;
   } catch (error) {
     logEvent('Lỗi xác minh', error.message, 'error');
     toast('Không thể xác minh: ' + error.message, true);
+    return false;
   } finally {
     busy = false; updateButtons();
   }
@@ -297,6 +315,8 @@ async function exportEvidence() {
     const record = { ...readForm(), signedAt: signed.record.signedAt };
     const data = {
       schema: 'medseal.educational-demo.v1',
+      version: revisionHistory.length,
+      revisions: revisionHistory.map(item => ({ ...item, record: { ...item.record } })),
       warning: 'Dữ liệu giả lập. Không dùng làm chứng từ y tế hoặc triển khai bệnh viện.',
       algorithm: { digest: 'SHA-256', signature: 'RSA-PSS', modulusLength: 2048, saltLength: 32, encoding: 'UTF-8', canonicalization: 'JSON keys sorted lexicographically; Unicode NFC; compact JSON' },
       signedRecord: signed.record,
@@ -381,6 +401,41 @@ async function initialize() {
     updateButtons();
   }
 }
+
+// Public bridge for classroom presentation and cross-device read-only verification.
+// Only exports public data and signed records. The non-exportable private key is never exposed.
+window.MedSealDemo = Object.freeze({
+  async sign() { return Boolean(await signRecord({ preventDefault() {} })); },
+  async verify() { return Boolean(await verifyRecord()); },
+  tamperDose() { if (!signed || busy) return false; attackDose(); return true; },
+  restore() { if (!signed || busy) return false; restoreOriginal(); return true; },
+  resetSample() {
+    if (busy) return false;
+    for (const id of FIELD_IDS) $(id).value = INITIAL[id];
+    if (signed) resetVerificationDisplay();
+    updateLiveHash();
+    $('recordForm').dispatchEvent(new Event('input', { bubbles: true }));
+    return true;
+  },
+  ready() { return Boolean(keyPair && !busy); },
+  signed() { return Boolean(signed); },
+  history() { return revisionHistory.map(item => ({ ...item, record: { ...item.record } })); },
+  async exportPackage() {
+    if (!signed || !keyPair) throw new Error('Chưa ký bệnh án.');
+    const publicKeyJwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
+    return {
+      schema: 'medseal.signed-prescription.v2',
+      description: 'Đơn thuốc giả lập để xác minh công khai. Không chứa Private Key.',
+      algorithm: { hash: 'SHA-256', signature: 'RSA-PSS', saltLength: 32, modulusLength: 2048, canonicalization: 'Sorted JSON keys / Unicode NFC / UTF-8' },
+      signedRecord: { ...signed.record },
+      originalHashSha256: signed.hash,
+      signatureBase64: bytesToBase64(signed.originalSignature),
+      publicKeyJwk,
+      version: revisionHistory.length,
+      revisions: revisionHistory.map(item => ({ ...item, record: { ...item.record } }))
+    };
+  }
+});
 
 $('recordForm').addEventListener('submit', signRecord);
 $('recordForm').addEventListener('input', markManualEdit);
