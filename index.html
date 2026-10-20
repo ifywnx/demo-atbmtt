@@ -3,6 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Keep demo URLs clean without reloading or losing other URL parameters.
+    (() => {
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('utm_source')) {
+          url.searchParams.delete('utm_source');
+          window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+        }
+      } catch (_) {
+        // If URL rewriting is restricted, normal website functionality is unaffected.
+      }
+    })();
+  </script>
   <meta name="theme-color" content="#092744">
   <meta name="description" content="MEDSEAL - Demo bảo vệ tính toàn vẹn bệnh án và đơn thuốc điện tử bằng SHA-256 và chữ ký số RSA-PSS 2048-bit.">
   <title>MEDSEAL | Demo SHA-256 & RSA-PSS</title>
